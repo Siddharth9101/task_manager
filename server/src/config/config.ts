@@ -15,4 +15,5 @@ export const config = {
   isProduction: (process.env.NODE_ENV ?? "development") === "production",
   logLevel: process.env.LOG_LEVEL ?? "info",
   databaseUrl: checkRequiredEnvVariable("DATABASE_URL"),
+  accessTokenSecret: checkRequiredEnvVariable("ACCESS_TOKEN_SECRET"),
 };

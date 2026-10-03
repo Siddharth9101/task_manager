@@ -1,10 +1,6 @@
 import { Router } from "express";
+import * as healthController from "../controllers/health.controller.js";
 
 export const healthRouter = Router();
 
-healthRouter.get("/", (_req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "health route is working",
-  });
-});
+healthRouter.get("/", healthController.health);
