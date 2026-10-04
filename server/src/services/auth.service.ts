@@ -2,14 +2,18 @@ import { LoginUserInput, RegisterUserInput, User } from "../types/user.js";
 import * as userRepo from "../repositories/user.repository.js";
 import { AppError } from "../errors/AppError.js";
 import bcrypt from "bcryptjs";
-import { PASSWORD_HASH_SALT } from "../constants/constants.js";
+import { Code, PASSWORD_HASH_SALT } from "../constants/constants.js";
 import { signAccessToken } from "../lib/jwt.js";
 
 export async function register(data: RegisterUserInput): Promise<User> {
   const existingUser = await userRepo.findByEmail(data.email);
 
   if (existingUser) {
-    throw new AppError(409, "email already in use, try logging in");
+    throw new AppError(
+      409,
+      "email already in use, try logging in",
+      Code.CONFLICT,
+    );
   }
 
   const hashedPassword = await bcrypt.hash(data.password, PASSWORD_HASH_SALT);
@@ -25,7 +29,7 @@ export async function login(
   const existingUser = await userRepo.findByEmailWithPassword(data.email);
 
   if (!existingUser) {
-    throw new AppError(401, "invalid creadentials");
+    throw new AppError(401, "invalid creadentials", Code.UNAUTHENTICATED);
   }
 
   const validPassword = await bcrypt.compare(
@@ -34,7 +38,7 @@ export async function login(
   );
 
   if (!validPassword) {
-    throw new AppError(401, "invalid creadentials");
+    throw new AppError(401, "invalid creadentials", Code.UNAUTHENTICATED);
   }
 
   const accessToken = signAccessToken({

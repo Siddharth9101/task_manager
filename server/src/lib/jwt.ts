@@ -8,3 +8,7 @@ export function signAccessToken(payload: AccessTokenPayload): string {
     expiresIn: ACCESS_TOKEN_EXPIRY,
   });
 }
+
+export function verifyAccessToken(token: string): AccessTokenPayload {
+  return jwt.verify(token, config.accessTokenSecret) as AccessTokenPayload;
+}

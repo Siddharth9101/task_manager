@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ApiResponse } from "../types/apiResponse.js";
+import { Code } from "../constants/constants.js";
 
 export function notFound(
   _req: Request,
@@ -8,6 +9,9 @@ export function notFound(
 ) {
   res.status(404).json({
     success: false,
-    error: "route not found",
+    error: {
+      message: "route not found",
+      code: Code.NOT_FOUND,
+    },
   });
 }

@@ -19,3 +19,7 @@ export const updatePasswordSchema = z.object({
   currentPassword: z.string(),
   newPassword: z.string().min(6, "password must be atleast 6 characters"),
 });
+
+export const updateUserParams = z.object({
+  id: z.uuid(),
+});
