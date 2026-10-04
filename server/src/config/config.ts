@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { CookieOptions } from "express";
 dotenv.config();
 
 function checkRequiredEnvVariable(key: string): string {
@@ -16,4 +17,11 @@ export const config = {
   logLevel: process.env.LOG_LEVEL ?? "info",
   databaseUrl: checkRequiredEnvVariable("DATABASE_URL"),
   accessTokenSecret: checkRequiredEnvVariable("ACCESS_TOKEN_SECRET"),
+};
+
+export const cookieOptions: CookieOptions = {
+  maxAge: 1000 * 60 * 30, // 30 mins
+  httpOnly: true,
+  secure: config.isProduction,
+  sameSite: "lax",
 };

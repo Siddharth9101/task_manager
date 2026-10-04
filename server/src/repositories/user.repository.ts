@@ -83,7 +83,7 @@ export async function update(
   const result = await pool.query<DbUser>(
     `
       UPDATE users
-      SET name = $1
+      SET name = $1, updated_at = NOW()
       WHERE id = $2
     `,
     [data.name, userId],
@@ -99,7 +99,7 @@ export async function updatePassword(
   await pool.query(
     `
       UPDATE users
-      SET password_hash = $1
+      SET password_hash = $1, updated_at = NOW()
       WHERE id = $2
     `,
     [password_hash, userId],

@@ -3,6 +3,7 @@ import { ApiResponse } from "../types/apiResponse.js";
 import { loginUserSchema, registerUserSchema } from "../schemas/user.js";
 import * as authService from "../services/auth.service.js";
 import { User } from "../types/user.js";
+import { cookieOptions } from "../config/config.js";
 
 export async function register(
   req: Request,
@@ -26,7 +27,7 @@ export async function register(
 
 export async function login(
   req: Request,
-  res: Response<ApiResponse<{ accessToken: string }>>,
+  res: Response<ApiResponse<null>>,
   next: NextFunction,
 ) {
   try {
@@ -34,10 +35,10 @@ export async function login(
 
     const { accessToken } = await authService.login(parsedBody);
 
+    res.cookie("accessToken", accessToken, cookieOptions);
     res.status(200).json({
       success: true,
       message: "login successful",
-      data: { accessToken },
     });
   } catch (err) {
     next(err);
