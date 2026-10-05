@@ -83,6 +83,29 @@ export async function findAllAssigned(
   }
 }
 
+export async function findAllOverdue(
+  req: Request,
+  res: Response<ApiResponse<Task[]>>,
+  next: NextFunction,
+) {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new AppError(401, "unauthenticated", Code.UNAUTHENTICATED);
+    }
+
+    const tasks = await taskService.findAllOverdue(userId);
+
+    res.status(200).json({
+      success: true,
+      message: "overdue tasks fetched successfully",
+      data: tasks,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function update(
   req: Request,
   res: Response<ApiResponse<Task>>,

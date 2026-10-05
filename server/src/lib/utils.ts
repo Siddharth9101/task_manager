@@ -37,7 +37,9 @@ export function mapDbTaskToTask({
   priority,
   status,
   created_at,
-  assigned_to_it,
+  assigned_to_id,
+  creator_name,
+  assigned_to_name,
   creator_id,
   updated_at,
 }: DbTask): Task {
@@ -49,7 +51,9 @@ export function mapDbTaskToTask({
     priority,
     status,
     creatorId: creator_id,
-    assignedToIt: assigned_to_it,
+    assignedToId: assigned_to_id,
+    creatorName: creator_name,
+    assignedToName: assigned_to_name,
     createdAt: created_at.toLocaleDateString(),
     updatedAt: updated_at.toLocaleDateString(),
   };

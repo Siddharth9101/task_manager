@@ -50,24 +50,30 @@ export async function findAll(
   if (type === "created") {
     // creator_id
     values.push(userId);
-    whereClause.push(`creator_id = $${values.length}`);
+    whereClause.push(`t.creator_id = $${values.length}`);
   } else {
     // assigned_to_id
     values.push(userId);
-    whereClause.push(`assigned_to_id = $${values.length}`);
+    whereClause.push(`t.assigned_to_id = $${values.length}`);
   }
 
   // search
-  values.push(`%${search}%`);
-  whereClause.push(`title ILIKE $${values.length}`);
+  if (search) {
+    values.push(`%${search}%`);
+    whereClause.push(`t.title ILIKE $${values.length}`);
+  }
 
   // priority
-  values.push(priority);
-  whereClause.push(`priority = $${values.length}`);
+  if (priority) {
+    values.push(priority);
+    whereClause.push(`t.priority = $${values.length}`);
+  }
 
   // status
-  values.push(status);
-  whereClause.push(`status = $${values.length}`);
+  if (status) {
+    values.push(status);
+    whereClause.push(`t.status = $${values.length}`);
+  }
 
   const where = whereClause.join(" AND ");
 
@@ -79,22 +85,25 @@ export async function findAll(
   const dbSort = sort === "asc" ? "ASC" : "DESC";
 
   const sortColumnMap = {
-    createdAt: "created_at",
-    dueDate: "due_date",
+    createdAt: "t.created_at",
+    dueDate: "t.due_date",
   };
 
   const dbSortBy = sortColumnMap[sortBy ?? "createdAt"];
 
-  const baseQuery = `
-    FROM tasks
-    WHERE ${where}
-  `;
-
   const [result, countResult] = await Promise.all([
     pool.query<DbTask>(
       `
-        SELECT *
-        ${baseQuery}
+        SELECT
+          t.*,
+          creator.name AS creator_name,
+          assignee.name AS assigned_to_name
+        FROM tasks AS t
+        JOIN users AS creator
+          ON t.creator_id = creator.id
+        JOIN users AS assignee
+          ON t.assigned_to_id = assignee.id
+        WHERE ${where}
         ORDER BY ${dbSortBy} ${dbSort}
         OFFSET $${values.length + 1}
         LIMIT $${values.length + 2}
@@ -104,9 +113,10 @@ export async function findAll(
     pool.query<{ total_tasks: string }>(
       `
       SELECT COUNT(*) AS total_tasks
-      ${baseQuery}    
+      FROM tasks AS t
+      WHERE ${where}   
     `,
-      [values],
+      values,
     ),
   ]);
 
@@ -123,7 +133,19 @@ export async function findAll(
 export async function findAllOverdue(userId: string): Promise<Task[]> {
   const result = await pool.query<DbTask>(
     `
-            SELECT * FROM tasks WHERE assigned_to_id = $1 AND due_date < NOW() AND status != 'COMPLETED' ORDER BY created_at DESC
+            SELECT 
+              t.*,
+              creator.name AS creator_name,
+              assignee.name AS assigned_to_name
+            FROM tasks AS t
+            JOIN users AS creator
+              ON t.creator_id = creator.id
+            JOIN users AS assignee
+              ON t.assigned_to_id = assignee.id
+            WHERE t.assigned_to_id = $1
+              AND t.due_date < NOW()
+              AND t.status != 'COMPLETED'
+            ORDER BY t.created_at DESC
         `,
     [userId],
   );

@@ -4,6 +4,7 @@ import { AppError } from "../errors/AppError.js";
 import bcrypt from "bcryptjs";
 import { Code, PASSWORD_HASH_SALT } from "../constants/constants.js";
 import { signAccessToken } from "../lib/jwt.js";
+import { logger } from "../lib/logger.js";
 
 export async function register(data: RegisterUserInput): Promise<User> {
   const existingUser = await userRepo.findByEmail(data.email);
@@ -29,6 +30,9 @@ export async function login(
   const existingUser = await userRepo.findByEmailWithPassword(data.email);
 
   if (!existingUser) {
+    logger.debug(
+      `auth.service.login, email ${data.email} does not exists in db`,
+    );
     throw new AppError(401, "invalid creadentials", Code.UNAUTHENTICATED);
   }
 
@@ -38,6 +42,7 @@ export async function login(
   );
 
   if (!validPassword) {
+    logger.debug(`auth.service.login, invalid password for ${data.email}`);
     throw new AppError(401, "invalid creadentials", Code.UNAUTHENTICATED);
   }
 

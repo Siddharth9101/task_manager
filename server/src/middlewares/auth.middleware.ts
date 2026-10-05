@@ -3,6 +3,7 @@ import { ApiResponse } from "../types/apiResponse.js";
 import { AppError } from "../errors/AppError.js";
 import { Code } from "../constants/constants.js";
 import { verifyAccessToken } from "../lib/jwt.js";
+import { logger } from "../lib/logger.js";
 
 export async function authenticate(
   req: Request,
@@ -11,11 +12,13 @@ export async function authenticate(
 ) {
   const token = req.cookies?.accessToken;
   if (!token) {
+    logger.debug(`authenticate, token not found in cookies`);
     throw new AppError(401, "unauthenticated", Code.UNAUTHENTICATED);
   }
   const tokenBody = verifyAccessToken(token);
 
   if (!tokenBody.id || !tokenBody.name || !tokenBody.email) {
+    logger.debug(`authenticate, token does not contain required fields`);
     throw new AppError(401, "unauthenticated", Code.UNAUTHENTICATED);
   }
   req.user = tokenBody;

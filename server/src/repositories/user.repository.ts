@@ -19,7 +19,7 @@ export async function findByEmail(email: string): Promise<User | null> {
     [email],
   );
 
-  return mapDbUserToUser(result.rows[0]) ?? null;
+  return result.rows.length !== 0 ? mapDbUserToUser(result.rows[0]) : null;
 }
 
 export async function findById(id: string): Promise<User | null> {
@@ -31,7 +31,7 @@ export async function findById(id: string): Promise<User | null> {
     `,
     [id],
   );
-  return mapDbUserToUser(result.rows[0]) ?? null;
+  return result.rows.length !== 0 ? mapDbUserToUser(result.rows[0]) : null;
 }
 
 export async function findByIdWithPassword(
@@ -45,7 +45,9 @@ export async function findByIdWithPassword(
     `,
     [id],
   );
-  return mapDbUserToUserWithPassword(result.rows[0]) ?? null;
+  return result.rows.length !== 0
+    ? mapDbUserToUserWithPassword(result.rows[0])
+    : null;
 }
 
 export async function findByEmailWithPassword(
@@ -60,7 +62,9 @@ export async function findByEmailWithPassword(
     [email],
   );
 
-  return mapDbUserToUserWithPassword(result.rows[0]) ?? null;
+  return result.rows.length !== 0
+    ? mapDbUserToUserWithPassword(result.rows[0])
+    : null;
 }
 
 export async function create(data: RegisterUserInput): Promise<User> {

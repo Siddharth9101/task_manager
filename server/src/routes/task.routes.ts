@@ -9,6 +9,7 @@ taskRouter.use(authenticate);
 taskRouter.post("/", taskController.create);
 taskRouter.get("/created", taskController.findAllCreated);
 taskRouter.get("/assigned", taskController.findAllAssigned);
+taskRouter.get("/due", taskController.findAllOverdue);
 taskRouter
   .route("/:id")
   .patch(taskController.update)

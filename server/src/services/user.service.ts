@@ -3,6 +3,7 @@ import * as userRepo from "../repositories/user.repository.js";
 import { AppError } from "../errors/AppError.js";
 import { Code, PASSWORD_HASH_SALT } from "../constants/constants.js";
 import bcrypt from "bcryptjs";
+import { logger } from "../lib/logger.js";
 
 export async function update(
   data: UpdateUserInput,
@@ -11,6 +12,9 @@ export async function update(
 ): Promise<User> {
   const user = await userRepo.findById(updateUserId);
   if (!user || user.id !== loggedInUserId) {
+    logger.debug(
+      `user.service.update, either userId is inavalid or loggin user is not updating his info`,
+    );
     throw new AppError(403, "unauthorized", Code.UNAUTHORIZED);
   }
   const updatedUser = await userRepo.update(data, updateUserId);
@@ -24,6 +28,9 @@ export async function updatePassword(
 ): Promise<void> {
   const user = await userRepo.findByIdWithPassword(updateUserId);
   if (!user || user.id !== loggedInUserId) {
+    logger.debug(
+      `user.service.updatePassword, either userId is inavalid or loggin user is not updating his info`,
+    );
     throw new AppError(403, "unauthorized", Code.UNAUTHORIZED);
   }
   const passwordValid = await bcrypt.compare(

@@ -1,5 +1,6 @@
 import { Code } from "../constants/constants.js";
 import { AppError } from "../errors/AppError.js";
+import { logger } from "../lib/logger.js";
 import * as taskRepo from "../repositories/task.repository.js";
 import {
   CreateTaskInput,
@@ -30,6 +31,10 @@ export async function findAllAssigned(
   return taskRepo.findAll(loggedInUserId, "assigned", queryParams);
 }
 
+export async function findAllOverdue(loggedInUserId: string): Promise<Task[]> {
+  return await taskRepo.findAllOverdue(loggedInUserId);
+}
+
 export async function update(
   data: UpdateTaskInput,
   updateTaskId: string,
@@ -41,6 +46,7 @@ export async function update(
   }
 
   if (taskExists.creatorId !== loggedInUserId) {
+    logger.debug(`task.service.update, creatorId != loggin user`);
     throw new AppError(403, "unauthorized", Code.UNAUTHORIZED);
   }
 
@@ -57,6 +63,7 @@ export async function deleteTask(
   }
 
   if (taskExists.creatorId !== loggedInUserId) {
+    logger.debug(`task.service.deleteTask, creatorId != loggin user`);
     throw new AppError(403, "unauthorized", Code.UNAUTHORIZED);
   }
 
