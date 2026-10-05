@@ -24,15 +24,15 @@ export type Task = {
   id: string;
   title: string;
   description: string;
-  dueDate: string;
+  dueDate: Date;
   priority: "LOW" | "MEDIUM" | "HIGH" | "URGENT";
   status: "TODO" | "IN_PROGRESS" | "REVIEW" | "COMPLETE";
   creatorId: string;
   assignedToId: string;
   creatorName: string;
   assignedToName: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type CreateTaskInput = z.infer<typeof createTaskSchema>;

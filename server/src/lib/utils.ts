@@ -47,14 +47,14 @@ export function mapDbTaskToTask({
     id,
     title,
     description,
-    dueDate: due_date.toLocaleDateString(),
+    dueDate: due_date,
     priority,
     status,
     creatorId: creator_id,
     assignedToId: assigned_to_id,
     creatorName: creator_name,
     assignedToName: assigned_to_name,
-    createdAt: created_at.toLocaleDateString(),
-    updatedAt: updated_at.toLocaleDateString(),
+    createdAt: created_at,
+    updatedAt: updated_at,
   };
 }
