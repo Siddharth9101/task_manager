@@ -23,3 +23,13 @@ export const updateTaskSchema = z.object({
 export const taskParams = z.object({
   id: z.uuid(),
 });
+
+export const taskQueryParams = z.object({
+  search: z.string().optional(),
+  priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]).optional(),
+  status: z.enum(["TODO", "IN_PROGRESS", "REVIEW", "COMPLETE"]).optional(),
+  page: z.string().optional(),
+  limit: z.string().optional(),
+  sort: z.enum(["asc", "desc"]).optional(),
+  sortBy: z.enum(["createdAt", "dueDate"]).optional(),
+});

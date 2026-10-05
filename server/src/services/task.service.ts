@@ -1,7 +1,13 @@
 import { Code } from "../constants/constants.js";
 import { AppError } from "../errors/AppError.js";
 import * as taskRepo from "../repositories/task.repository.js";
-import { CreateTaskInput, Task, UpdateTaskInput } from "../types/task.js";
+import {
+  CreateTaskInput,
+  PaginatedTasks,
+  QueryParams,
+  Task,
+  UpdateTaskInput,
+} from "../types/task.js";
 
 export async function create(
   data: CreateTaskInput,
@@ -10,12 +16,18 @@ export async function create(
   return await taskRepo.create(data, loggedInUserId);
 }
 
-export async function findAllCreated(loggedInUserId: string): Promise<Task[]> {
-  return taskRepo.findAllCreated(loggedInUserId);
+export async function findAllCreated(
+  loggedInUserId: string,
+  queryParams: QueryParams,
+): Promise<PaginatedTasks> {
+  return taskRepo.findAll(loggedInUserId, "created", queryParams);
 }
 
-export async function findAllAssigned(loggedInUserId: string): Promise<Task[]> {
-  return taskRepo.findAllAssigned(loggedInUserId);
+export async function findAllAssigned(
+  loggedInUserId: string,
+  queryParams: QueryParams,
+): Promise<PaginatedTasks> {
+  return taskRepo.findAll(loggedInUserId, "assigned", queryParams);
 }
 
 export async function update(

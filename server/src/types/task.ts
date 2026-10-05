@@ -1,5 +1,9 @@
 import z from "zod";
-import { createTaskSchema, updateTaskSchema } from "../schemas/task.js";
+import {
+  createTaskSchema,
+  taskQueryParams,
+  updateTaskSchema,
+} from "../schemas/task.js";
 
 export type DbTask = {
   id: string;
@@ -29,3 +33,11 @@ export type Task = {
 
 export type CreateTaskInput = z.infer<typeof createTaskSchema>;
 export type UpdateTaskInput = z.infer<typeof updateTaskSchema>;
+export type QueryParams = z.infer<typeof taskQueryParams>;
+
+export type PaginatedTasks = {
+  tasks: Task[];
+  page: number;
+  totalTasks: number;
+  totalPages: number;
+};

@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { ApiResponse } from "../types/apiResponse.js";
-import { Task } from "../types/task.js";
+import { PaginatedTasks, Task } from "../types/task.js";
 import {
   createTaskSchema,
   taskParams,
+  taskQueryParams,
   updateTaskSchema,
 } from "../schemas/task.js";
 import * as taskService from "../services/task.service.js";
@@ -35,7 +36,7 @@ export async function create(
 
 export async function findAllCreated(
   req: Request,
-  res: Response<ApiResponse<Task[]>>,
+  res: Response<ApiResponse<PaginatedTasks>>,
   next: NextFunction,
 ) {
   try {
@@ -43,8 +44,9 @@ export async function findAllCreated(
     if (!userId) {
       throw new AppError(401, "unauthenticated", Code.UNAUTHENTICATED);
     }
+    const parsedQueryParams = taskQueryParams.parse(req.query);
 
-    const tasks = await taskService.findAllCreated(userId);
+    const tasks = await taskService.findAllCreated(userId, parsedQueryParams);
 
     res.status(200).json({
       success: true,
@@ -58,7 +60,7 @@ export async function findAllCreated(
 
 export async function findAllAssigned(
   req: Request,
-  res: Response<ApiResponse<Task[]>>,
+  res: Response<ApiResponse<PaginatedTasks>>,
   next: NextFunction,
 ) {
   try {
@@ -67,7 +69,9 @@ export async function findAllAssigned(
       throw new AppError(401, "unauthenticated", Code.UNAUTHENTICATED);
     }
 
-    const tasks = await taskService.findAllAssigned(userId);
+    const parsedQueryParams = taskQueryParams.parse(req.query);
+
+    const tasks = await taskService.findAllAssigned(userId, parsedQueryParams);
 
     res.status(200).json({
       success: true,
