@@ -8,9 +8,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "migrate": "tsx src/scripts/migrate.ts",
-    "test": "vitest",
-    "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "migrate:prod": "node dist/scripts/migrate.js",
+    "test:run": "vitest run"
   },
   "keywords": [],
   "author": "Siddharth Saxena <siddharthsaxena9101@gmail.com>",
