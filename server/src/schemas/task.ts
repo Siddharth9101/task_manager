@@ -7,7 +7,7 @@ export const createTaskSchema = z.object({
     message: "Due date must be in the future",
   }),
   priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]),
-  status: z.enum(["TODO", "IN_PROGRESS", "REVIEW", "COMPLETE"]),
+  status: z.enum(["TODO", "IN_PROGRESS", "REVIEW", "COMPLETED"]),
   assignedToId: z.uuid(),
 });
 
@@ -24,7 +24,7 @@ export const updateTaskSchema = z.object({
     })
     .optional(),
   priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]).optional(),
-  status: z.enum(["TODO", "IN_PROGRESS", "REVIEW", "COMPLETE"]).optional(),
+  status: z.enum(["TODO", "IN_PROGRESS", "REVIEW", "COMPLETED"]).optional(),
 });
 
 export const taskParams = z.object({

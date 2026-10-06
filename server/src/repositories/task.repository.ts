@@ -156,12 +156,12 @@ export async function findAllOverdue(userId: string): Promise<Task[]> {
 export async function findById(id: string): Promise<Task | null> {
   const result = await pool.query<DbTask>(
     `
-            SELECT * FROM tasks WHERE id = $1
-        `,
+      SELECT * FROM tasks WHERE id = $1
+    `,
     [id],
   );
 
-  return mapDbTaskToTask(result.rows[0]) ?? null;
+  return result.rows.length !== 0 ? mapDbTaskToTask(result.rows[0]) : null;
 }
 
 export async function update(data: UpdateTaskInput, id: string): Promise<Task> {

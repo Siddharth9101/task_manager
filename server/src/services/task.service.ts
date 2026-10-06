@@ -2,6 +2,7 @@ import { Code } from "../constants/constants.js";
 import { AppError } from "../errors/AppError.js";
 import { logger } from "../lib/logger.js";
 import * as taskRepo from "../repositories/task.repository.js";
+import { findById } from "../repositories/user.repository.js";
 import {
   CreateTaskInput,
   PaginatedTasks,
@@ -14,6 +15,10 @@ export async function create(
   data: CreateTaskInput,
   loggedInUserId: string,
 ): Promise<Task> {
+  const user = await findById(loggedInUserId);
+  if (!user) {
+    throw new AppError(401, "unauthenticated", Code.UNAUTHENTICATED);
+  }
   return await taskRepo.create(data, loggedInUserId);
 }
 
@@ -21,6 +26,10 @@ export async function findAllCreated(
   loggedInUserId: string,
   queryParams: QueryParams,
 ): Promise<PaginatedTasks> {
+  const user = await findById(loggedInUserId);
+  if (!user) {
+    throw new AppError(401, "unauthenticated", Code.UNAUTHENTICATED);
+  }
   return taskRepo.findAll(loggedInUserId, "created", queryParams);
 }
 
@@ -28,10 +37,18 @@ export async function findAllAssigned(
   loggedInUserId: string,
   queryParams: QueryParams,
 ): Promise<PaginatedTasks> {
+  const user = await findById(loggedInUserId);
+  if (!user) {
+    throw new AppError(401, "unauthenticated", Code.UNAUTHENTICATED);
+  }
   return taskRepo.findAll(loggedInUserId, "assigned", queryParams);
 }
 
 export async function findAllOverdue(loggedInUserId: string): Promise<Task[]> {
+  const user = await findById(loggedInUserId);
+  if (!user) {
+    throw new AppError(401, "unauthenticated", Code.UNAUTHENTICATED);
+  }
   return await taskRepo.findAllOverdue(loggedInUserId);
 }
 
@@ -40,6 +57,10 @@ export async function update(
   updateTaskId: string,
   loggedInUserId: string,
 ): Promise<Task> {
+  const user = await findById(loggedInUserId);
+  if (!user) {
+    throw new AppError(401, "unauthenticated", Code.UNAUTHENTICATED);
+  }
   const taskExists = await taskRepo.findById(updateTaskId);
   if (!taskExists) {
     throw new AppError(404, "task not found", Code.NOT_FOUND);
@@ -57,6 +78,10 @@ export async function deleteTask(
   taskId: string,
   loggedInUserId: string,
 ): Promise<void> {
+  const user = await findById(loggedInUserId);
+  if (!user) {
+    throw new AppError(401, "unauthenticated", Code.UNAUTHENTICATED);
+  }
   const taskExists = await taskRepo.findById(taskId);
   if (!taskExists) {
     throw new AppError(404, "task not found", Code.NOT_FOUND);

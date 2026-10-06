@@ -11,7 +11,7 @@ export type DbTask = {
   description: string;
   due_date: Date;
   priority: "LOW" | "MEDIUM" | "HIGH" | "URGENT";
-  status: "TODO" | "IN_PROGRESS" | "REVIEW" | "COMPLETE";
+  status: "TODO" | "IN_PROGRESS" | "REVIEW" | "COMPLETED";
   creator_id: string;
   assigned_to_id: string;
   creator_name: string;
@@ -26,7 +26,7 @@ export type Task = {
   description: string;
   dueDate: Date;
   priority: "LOW" | "MEDIUM" | "HIGH" | "URGENT";
-  status: "TODO" | "IN_PROGRESS" | "REVIEW" | "COMPLETE";
+  status: "TODO" | "IN_PROGRESS" | "REVIEW" | "COMPLETED";
   creatorId: string;
   assignedToId: string;
   creatorName: string;

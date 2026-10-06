@@ -4,6 +4,8 @@ import { globalErrorHandler } from "./middlewares/globalErrorHandler.mw.js";
 import { notFound } from "./middlewares/notFound.mw.js";
 import { requestId } from "./middlewares/requestId.mw.js";
 import cookieParser from "cookie-parser";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./lib/swagger.js";
 
 export function createApp() {
   const app = express();
@@ -14,6 +16,7 @@ export function createApp() {
   app.use(requestId);
 
   app.use("/api/v1", apiRouter);
+  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
   app.use(notFound);
   app.use(globalErrorHandler);

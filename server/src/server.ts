@@ -11,7 +11,9 @@ async function startServer() {
     logger.info("database connection established");
 
     app.listen(config.port, () => {
-      logger.info(`server is now running on http://localhost:${config.port}`);
+      logger.info(
+        `server is now running on http://localhost:${config.port}/docs`,
+      );
     });
   } catch (err) {
     logger.error({ err }, "database connection failed; exiting");
