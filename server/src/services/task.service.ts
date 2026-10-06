@@ -19,6 +19,12 @@ export async function create(
   if (!user) {
     throw new AppError(401, "unauthenticated", Code.UNAUTHENTICATED);
   }
+
+  const assignedToUser = await taskRepo.findById(data.assignedToId);
+  if (!assignedToUser) {
+    throw new AppError(404, "assigned user not found", Code.NOT_FOUND);
+  }
+
   return await taskRepo.create(data, loggedInUserId);
 }
 
