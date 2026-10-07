@@ -1,26 +1,48 @@
 import { createBrowserRouter } from "react-router";
 import { Register, Login } from "./features/auth/pages";
 import { Create, Update, Dashboard } from "./features/tasks/pages";
+import AuthGuard from "./features/auth/components/AuthGuard";
+import Protected from "./features/auth/components/Protected";
 
 export const router = createBrowserRouter([
   {
     path: "/register",
-    element: <Register />,
+    element: (
+      <AuthGuard>
+        <Register />
+      </AuthGuard>
+    ),
   },
   {
     path: "/login",
-    element: <Login />,
+    element: (
+      <AuthGuard>
+        <Login />
+      </AuthGuard>
+    ),
   },
   {
     path: "/",
-    element: <Dashboard />,
+    element: (
+      <Protected>
+        <Dashboard />
+      </Protected>
+    ),
   },
   {
     path: "/create",
-    element: <Create />,
+    element: (
+      <Protected>
+        <Create />
+      </Protected>
+    ),
   },
   {
     path: "/update",
-    element: <Update />,
+    element: (
+      <Protected>
+        <Update />
+      </Protected>
+    ),
   },
 ]);

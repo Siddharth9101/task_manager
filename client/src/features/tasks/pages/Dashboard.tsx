@@ -1,4 +1,4 @@
-import TaskCard from "../../../components/TaskCard";
+import TaskCard from "../components/TaskCard";
 
 const Dashboard = () => {
   const tasks = Array.from({ length: 10 });
