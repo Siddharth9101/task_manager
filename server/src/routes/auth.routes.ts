@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as authController from "../controllers/auth.controller.js";
+import { authenticate } from "../middlewares/auth.middleware.js";
 
 export const authRouter = Router();
 
@@ -81,3 +82,20 @@ authRouter.post("/register", authController.register);
  *         description: Invalid credentials
  */
 authRouter.post("/login", authController.login);
+
+/**
+ * @openapi
+ * /api/v1/auth/logout:
+ *   post:
+ *     summary: Logout the user
+ *     tags:
+ *       - Auth
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Logged out successfully
+ *       401:
+ *         description: Unauthenticated
+ */
+authRouter.post("/logout", authenticate, authController.logout);

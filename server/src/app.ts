@@ -6,10 +6,17 @@ import { requestId } from "./middlewares/requestId.mw.js";
 import cookieParser from "cookie-parser";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./lib/swagger.js";
+import cors from "cors";
 
 export function createApp() {
   const app = express();
 
+  app.use(
+    cors({
+      origin: "http://localhost:5173",
+      credentials: true,
+    }),
+  );
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());

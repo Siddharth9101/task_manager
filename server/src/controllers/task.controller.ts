@@ -150,3 +150,21 @@ export async function deleteTask(
     next(err);
   }
 }
+
+export async function findById(
+  req: Request,
+  res: Response<ApiResponse<Task>>,
+  next: NextFunction,
+) {
+  try {
+    const parsedParams = taskParams.parse(req.params);
+    const task = await taskService.findById(parsedParams.id);
+    res.status(200).json({
+      success: true,
+      message: "task fetched successfully",
+      data: task,
+    });
+  } catch (err) {
+    next(err);
+  }
+}

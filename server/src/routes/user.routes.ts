@@ -90,3 +90,5 @@ userRouter.patch("/", userController.update);
  *         description: Unauthenticated
  */
 userRouter.patch("/password", userController.updatePassword);
+
+userRouter.get("/", userController.getAllUsers);

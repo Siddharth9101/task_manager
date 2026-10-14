@@ -1,4 +1,9 @@
-import { UpdatePasswordInput, UpdateUserInput, User } from "../types/user.js";
+import {
+  UpdatePasswordInput,
+  UpdateUserInput,
+  User,
+  UserName,
+} from "../types/user.js";
 import * as userRepo from "../repositories/user.repository.js";
 import { AppError } from "../errors/AppError.js";
 import { Code, PASSWORD_HASH_SALT } from "../constants/constants.js";
@@ -44,4 +49,8 @@ export async function updatePassword(
   const passwordHash = await bcrypt.hash(data.newPassword, PASSWORD_HASH_SALT);
 
   await userRepo.updatePassword(passwordHash, updateUserId);
+}
+
+export async function getAllUsers(): Promise<UserName[]> {
+  return await userRepo.fetchAllUsers();
 }

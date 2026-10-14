@@ -7,6 +7,7 @@ import {
   User,
   UserWithPassword,
   UpdateUserInput,
+  UserName,
 } from "../types/user.js";
 
 export async function findByEmail(email: string): Promise<User | null> {
@@ -108,4 +109,11 @@ export async function updatePassword(
     `,
     [password_hash, userId],
   );
+}
+
+export async function fetchAllUsers(): Promise<UserName[]> {
+  const result = await pool.query(`
+      SELECT id, name FROM users
+    `);
+  return result.rows;
 }

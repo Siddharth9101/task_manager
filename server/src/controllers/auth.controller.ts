@@ -44,3 +44,19 @@ export async function login(
     next(err);
   }
 }
+
+export async function logout(
+  _req: Request,
+  res: Response<ApiResponse<null>>,
+  next: NextFunction,
+) {
+  try {
+    res.clearCookie("accessToken");
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+}

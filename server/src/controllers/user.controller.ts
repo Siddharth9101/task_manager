@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { ApiResponse } from "../types/apiResponse.js";
 import { AccessTokenPayload } from "../types/jwt.js";
-import { User } from "../types/user.js";
+import { User, UserName } from "../types/user.js";
 import {
   updatePasswordSchema,
   updateUserParams,
@@ -68,6 +68,23 @@ export async function updatePassword(
     res.status(200).json({
       success: true,
       message: "user details updated successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getAllUsers(
+  _req: Request,
+  res: Response<ApiResponse<UserName[]>>,
+  next: NextFunction,
+) {
+  try {
+    const users = await userService.getAllUsers();
+    res.status(200).json({
+      success: true,
+      message: "users fetched successfully",
+      data: users,
     });
   } catch (err) {
     next(err);

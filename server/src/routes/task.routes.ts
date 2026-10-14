@@ -322,3 +322,31 @@ taskRouter.patch("/:id", taskController.update);
  *         description: Task Not Found
  */
 taskRouter.delete("/:id", taskController.deleteTask);
+
+/**
+ * @openapi
+ * /api/v1/tasks/{id}:
+ *   get:
+ *     summary: Get a task by Id
+ *     tags:
+ *       - Tasks
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the task to delete
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: "4c34c5f1-3eef-44b5-bb6a-78cf7abcd123"
+ *     responses:
+ *       200:
+ *         description: Task deleted successfully
+ *       401:
+ *         description: Unauthenticated
+ *       404:
+ *         description: Task Not Found
+ */
+taskRouter.get("/:id", taskController.findById);

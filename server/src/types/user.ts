@@ -19,6 +19,11 @@ export type DbUserWithPassword = DbUser & {
   password_hash: string;
 };
 
+export type UserName = {
+  id: string;
+  name: string;
+};
+
 export type User = {
   id: string;
   name: string;
