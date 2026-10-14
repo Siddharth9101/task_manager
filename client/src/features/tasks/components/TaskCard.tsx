@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import type { Task } from "../types/task";
+import useTasks from "../hooks/useTasks";
 
 type TaskCardProps = {
   task: Task;
@@ -25,9 +26,15 @@ function formatLabel(value: string) {
 
 export default function TaskCard({ task }: TaskCardProps) {
   const navigate = useNavigate();
+  const { tasksType } = useTasks();
   return (
     <article
-      onClick={() => navigate(`/update/${task.id}`)}
+      onClick={() => {
+        if (tasksType !== "created") {
+          return;
+        }
+        navigate(`/update/${task.id}`);
+      }}
       className="cursor-pointer flex h-full flex-col gap-4 rounded-xl border  p-5 shadow-sm transition-shadow hover:shadow-md"
     >
       <div className="flex flex-wrap items-start justify-between gap-3">

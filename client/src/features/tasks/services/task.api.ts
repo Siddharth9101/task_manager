@@ -9,7 +9,7 @@ import type {
 } from "../types/task";
 
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_BACKEND_BASE_URL}:${import.meta.env.VITE_BACKEND_PORT}/api/v1`,
+  baseURL: `/api/v1`,
   withCredentials: true,
 });
 

@@ -1,4 +1,15 @@
 services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.local
+    container_name: task_manager_client
+    ports:
+      - "5173:4173"
+    env_file:
+      - "./.env.local"
+    depends_on:
+      - server
   server:
     build:
       context: ./server
