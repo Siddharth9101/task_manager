@@ -3,6 +3,7 @@ import { Register, Login } from "./features/auth/pages";
 import { Create, Update, Dashboard } from "./features/tasks/pages";
 import AuthGuard from "./features/auth/components/AuthGuard";
 import Protected from "./features/auth/components/Protected";
+import Layout from "./features/tasks/components/Layout";
 
 export const router = createBrowserRouter([
   {
@@ -25,7 +26,9 @@ export const router = createBrowserRouter([
     path: "/",
     element: (
       <Protected>
-        <Dashboard />
+        <Layout>
+          <Dashboard />
+        </Layout>
       </Protected>
     ),
   },
@@ -33,15 +36,19 @@ export const router = createBrowserRouter([
     path: "/create",
     element: (
       <Protected>
-        <Create />
+        <Layout>
+          <Create />
+        </Layout>
       </Protected>
     ),
   },
   {
-    path: "/update",
+    path: "/update/:id",
     element: (
       <Protected>
-        <Update />
+        <Layout>
+          <Update />
+        </Layout>
       </Protected>
     ),
   },

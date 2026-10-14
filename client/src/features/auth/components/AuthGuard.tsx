@@ -11,7 +11,7 @@ const AuthGuard = ({ children }: { children: React.ReactNode }) => {
     );
   }
   if (user) {
-    return <Navigate to={"/"} />;
+    return <Navigate to={"/"} replace />;
   }
 
   return children;

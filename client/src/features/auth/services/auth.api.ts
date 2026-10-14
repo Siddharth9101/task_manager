@@ -28,3 +28,8 @@ export async function fetchUser(): Promise<ApiResponse<AccessTokenPayload>> {
   const response = await api.get<ApiResponse<AccessTokenPayload>>("/user/me");
   return response.data;
 }
+
+export async function logout(): Promise<ApiResponse<null>> {
+  const response = await api.post<ApiResponse<null>>("auth/logout");
+  return response.data;
+}

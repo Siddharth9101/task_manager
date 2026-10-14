@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { fetchUser } from "./services/auth.api";
 import type { AccessTokenPayload } from "./types/user";
 import { AuthContext } from "./auth.context";
+import { fetchUser } from "./services/auth.api";
 
 export default function AuthContextProvider({
   children,
@@ -15,15 +15,15 @@ export default function AuthContextProvider({
 
   useEffect(() => {
     (async () => {
+      setLoading(true);
       try {
-        const data = await fetchUser();
-        if (data.success) {
-          setUser(data.data);
-        } else {
-          setUser(null);
+        const response = await fetchUser();
+        if (!response.success) {
+          throw new Error();
         }
+        setUser(response.data);
       } catch (err) {
-        console.error(err);
+        console.log(`authProvider, line - 26, err: ${err}`);
       } finally {
         setLoading(false);
       }

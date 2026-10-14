@@ -2,7 +2,8 @@ import { useContext } from "react";
 import { AuthContext } from "../auth.context";
 import { useNavigate } from "react-router";
 import type { LoginUserInput, RegisterUserInput } from "../types/user";
-import { login, register, fetchUser } from "../services/auth.api";
+import { fetchUser, login, logout, register } from "../services/auth.api";
+import toast from "react-hot-toast";
 
 const useAuth = () => {
   const context = useContext(AuthContext);
@@ -22,10 +23,11 @@ const useAuth = () => {
       if (!result.success) {
         throw new Error();
       }
-      setUser(result.data);
-      navigate("/");
+      navigate("/", { replace: true });
+      toast.success("Signed up, now Login to continue!");
     } catch (err) {
-      console.error(err);
+      console.error(`useAuth, line - 29, err: ${err}`);
+      toast.error("Failed to register!");
     } finally {
       setLoading(false);
     }
@@ -38,31 +40,40 @@ const useAuth = () => {
       if (!result.success) {
         throw new Error();
       }
-      setUser(result.data);
-      navigate("/");
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getMe = async () => {
-    setLoading(true);
-    try {
-      const result = await fetchUser();
-      if (!result.success) {
+      const userRes = await fetchUser();
+      if (!userRes.success) {
         throw new Error();
       }
-      setUser(result.data);
+      setUser(userRes.data);
+      navigate("/", { replace: true });
+      toast.success("Logged in!");
     } catch (err) {
-      console.error(err);
+      console.error(`useAuth, line - 50, err: ${err}`);
+      toast.error("Failed to login!");
     } finally {
       setLoading(false);
     }
   };
 
-  return { handleRegister, handleLogin, getMe, user, loading };
+  const handleLogout = async () => {
+    setLoading(true);
+    try {
+      const response = await logout();
+      if (!response.success) {
+        throw new Error();
+      }
+      setUser(null);
+      navigate("/login");
+      toast.success("Logged out!");
+    } catch (err) {
+      console.log(`useAuth line - 66, err: ${err}`);
+      toast.error("Failed to logout!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { handleRegister, handleLogin, handleLogout, user, loading };
 };
 
 export default useAuth;
