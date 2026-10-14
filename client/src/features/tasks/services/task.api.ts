@@ -20,17 +20,23 @@ export async function createTask(
   return result.data;
 }
 
-export async function fetchAssignedTasks(): Promise<
-  ApiResponse<PaginatedTasks>
-> {
-  const result = await api.get<ApiResponse<PaginatedTasks>>("/tasks/assigned");
+export async function fetchAssignedTasks(
+  sortBy: string,
+  search: string | undefined,
+): Promise<ApiResponse<PaginatedTasks>> {
+  const result = await api.get<ApiResponse<PaginatedTasks>>(
+    `/tasks/assigned?sortBy=${sortBy}&sort=${sortBy === "createdAt" ? "desc" : "asc"}&search=${search}`,
+  );
   return result.data;
 }
 
-export async function fetchCreatedTasks(): Promise<
-  ApiResponse<PaginatedTasks>
-> {
-  const result = await api.get<ApiResponse<PaginatedTasks>>("/tasks/created");
+export async function fetchCreatedTasks(
+  sortBy: string,
+  search: string | undefined,
+): Promise<ApiResponse<PaginatedTasks>> {
+  const result = await api.get<ApiResponse<PaginatedTasks>>(
+    `/tasks/created?sortBy=${sortBy}&sort=${sortBy === "createdAt" ? "desc" : "asc"}&search=${search}`,
+  );
   return result.data;
 }
 

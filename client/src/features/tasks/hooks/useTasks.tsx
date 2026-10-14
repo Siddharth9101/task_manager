@@ -19,11 +19,31 @@ const useTasks = () => {
   if (!context) {
     throw new Error("useContext must be used within TaskContextProvider");
   }
-  const { tasks, users, loading, setTasks, setUsers, setLoading } = context;
+  const {
+    tasks,
+    users,
+    loading,
+    tasksType,
+    sortBy,
+    search,
+    setTasks,
+    setUsers,
+    setLoading,
+    setTasksType,
+    setSortBy,
+    setSearch,
+  } = context;
   useEffect(() => {
-    getAllCreated();
+    if (tasksType === "created") {
+      getAllCreated();
+    } else if (tasksType === "assigned") {
+      getAllAssigned();
+    } else {
+      getAllOverdue();
+    }
+
     getAllUsers();
-  }, []);
+  }, [tasksType, sortBy, search]);
   const navigate = useNavigate();
   async function create(data: CreateTaskInput) {
     setLoading(true);
@@ -79,7 +99,7 @@ const useTasks = () => {
   async function getAllAssigned() {
     setLoading(true);
     try {
-      const result = await fetchAssignedTasks();
+      const result = await fetchAssignedTasks(sortBy, search);
       if (!result.success) {
         throw new Error();
       }
@@ -95,7 +115,7 @@ const useTasks = () => {
   async function getAllCreated() {
     setLoading(true);
     try {
-      const result = await fetchCreatedTasks();
+      const result = await fetchCreatedTasks(sortBy, search);
       if (!result.success) {
         throw new Error();
       }
@@ -166,6 +186,12 @@ const useTasks = () => {
     getAllOverdue,
     users,
     getById,
+    tasksType,
+    setTasksType,
+    sortBy,
+    setSortBy,
+    search,
+    setSearch,
   };
 };
 
