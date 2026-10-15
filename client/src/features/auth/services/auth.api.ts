@@ -8,7 +8,7 @@ import type {
 import type { ApiResponse } from "../../../types/apiResponse";
 
 const api = axios.create({
-  baseURL: `/api/v1`,
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 

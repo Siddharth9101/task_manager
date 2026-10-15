@@ -1,8 +1,11 @@
 import { Router } from "express";
 import * as authController from "../controllers/auth.controller.js";
 import { authenticate } from "../middlewares/auth.middleware.js";
+import { rateLimit } from "../middlewares/rateLimit.middleware.js";
 
 export const authRouter = Router();
+
+authRouter.use(rateLimit);
 
 /**
  * @openapi

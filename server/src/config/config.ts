@@ -17,6 +17,7 @@ export const config = {
   logLevel: process.env.LOG_LEVEL ?? "info",
   databaseUrl: checkRequiredEnvVariable("DATABASE_URL"),
   accessTokenSecret: checkRequiredEnvVariable("ACCESS_TOKEN_SECRET"),
+  redisUrl: checkRequiredEnvVariable("REDIS_URL"),
 };
 
 export const cookieOptions: CookieOptions = {
